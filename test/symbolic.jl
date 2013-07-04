@@ -1,3 +1,19 @@
+# Test simplify(e::Expr)
+eqsimp(a,b) = isequal(simplify(a),b)
+@assert eqsimp(:(x^0+5),6)
+@assert eqsimp(:(z^1*cos(z)),:(z*cos(z)))
+@assert eqsimp(:(6*2.*5*3),180.)
+@assert eqsimp(:(b+a),:(a+b))
+@assert eqsimp(:((a*b)*c),:(a*b*c))
+@assert eqsimp(:((a+b)+c),:(a+b+c))
+@assert eqsimp(:((a+5)+4+b),:(9+a+b))
+@assert eqsimp(:(a+(b-a)),:(b))
+@assert eqsimp(:(a+b-a+b),:(2b))
+@assert eqsimp(:((a+b)-(a+b)),0)
+# ensure simplify does not break matrix multiplication rules
+@assert !eqsimp(:(a*b),:(b*a))
+@assert !eqsimp(:(b*a),:(a*b))
+
 #
 # Univariate Calculus
 #
